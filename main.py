@@ -5,7 +5,9 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
 from logger import log_state, log_event
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FONT_NAME, FONT_SIZE
+from scoreboard import ScoreBoard
+
 
 def main():
     print(f"Starting Asteroids with pytgame version: {pygame.version.ver}")
@@ -13,12 +15,15 @@ def main():
     print(f"Screen height: {SCREEN_HEIGHT}")
     
     pygame.init()
+    pygame.font.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+
+    scoreboard = ScoreBoard(FONT_NAME, FONT_SIZE)
 
     Player.containers = (updatable, drawable)
     player = Player(x=SCREEN_WIDTH / 2, y=SCREEN_HEIGHT / 2)
@@ -39,6 +44,8 @@ def main():
                 return
 
         screen.fill("black")
+        scoreboard.display_score(screen)
+        scoreboard.display_high_score(screen)
 
         for obj in drawable:
             obj.draw(screen)
@@ -56,6 +63,7 @@ def main():
                     log_event("asteroid_shot")
                     shot.kill()
                     asteroid.split()
+                    scoreboard.increase_score(asteroid)
 
         pygame.display.flip()
 
