@@ -1,6 +1,7 @@
+import os
 import pygame
 from asteroid import Asteroid
-from constants import ASTEROID_MIN_RADIUS, ASTEROID_MAX_RADIUS
+from constants import ASTEROID_MIN_RADIUS, ASTEROID_MAX_RADIUS, HIGHEST_SCORE_FILE
 
 
 class ScoreBoard():
@@ -24,6 +25,25 @@ class ScoreBoard():
             self.current_score += 5
         else:
             self.current_score += 3
+
+    def save_highest_score(self):
+        if self.current_score <= self.highest_score:
+            return
+
+        self.highest_score = self.current_score
+        with open(HIGHEST_SCORE_FILE, "w") as file:
+            file.write(str(self.highest_score))
+
+    def load_highest_score(self):
+        if not os.path.exists(HIGHEST_SCORE_FILE):
+            self.highest_score = 0
+            return
+
+        try:
+            with open(HIGHEST_SCORE_FILE, "r") as file:
+                self.highest_score = int(file.read())
+        except ValueError:
+            self.highest_score = 0
 
     def _get_score_surface(self, text):
         return self.font.render(text, True, (255, 255, 255))

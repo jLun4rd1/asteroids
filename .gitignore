@@ -12,3 +12,4 @@ wheels/
 # Specific files
 game_state.jsonl
 game_events.jsonl
+highest_score.txt

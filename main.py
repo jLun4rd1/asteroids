@@ -24,6 +24,7 @@ def main():
     shots = pygame.sprite.Group()
 
     scoreboard = ScoreBoard(FONT_NAME, FONT_SIZE)
+    scoreboard.load_highest_score()
 
     Player.containers = (updatable, drawable)
     player = Player(x=SCREEN_WIDTH / 2, y=SCREEN_HEIGHT / 2)
@@ -54,6 +55,7 @@ def main():
         for obj in asteroids:
             if obj.collides_with(player):
                 log_event("player_hit")
+                scoreboard.save_highest_score()
                 print("Game over!")
                 sys.exit()
 
